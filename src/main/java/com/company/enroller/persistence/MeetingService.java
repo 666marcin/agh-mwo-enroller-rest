@@ -23,13 +23,13 @@ public class MeetingService {
 		Query query = connector.getSession().createQuery(hql);
 		return query.list();
 	}
-	
+
 	public Meeting findById(long id) {
 		return (Meeting) connector.getSession().get(Meeting.class, id);
 		// zeby sprawdzic czy dziala w np. przegladarke
 		// http://localhost:8080/meetings/2 lub 3 itd.
 	}
-	
+
 //	public Meeting findByTitle(String title) {
 //		return (Meeting) connector.getSession().get(Meeting.class, title);
 //	}
@@ -40,12 +40,19 @@ public class MeetingService {
 		transaction.commit();
 		return meeting;
 	}
-	
+
 	public Participant addParticipantToMeeting(Meeting meeting, Participant participant) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		meeting.addParticipant(participant);
 		connector.getSession().merge(meeting);
 		transaction.commit();
 		return participant;
+	}
+
+	public Collection<Participant> getMeetingParticipants(long id) {
+		String hql = "SELECT p FROM Meeting m join m.participants p WHERE m.id = " + id;
+		Query query = connector.getSession().createQuery(hql);
+		Collection<Participant> meetingParticipants = query.list();
+		return meetingParticipants;
 	}
 }
