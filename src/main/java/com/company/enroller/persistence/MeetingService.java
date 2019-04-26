@@ -30,10 +30,6 @@ public class MeetingService {
 		// http://localhost:8080/meetings/2 lub 3 itd.
 	}
 
-//	public Meeting findByTitle(String title) {
-//		return (Meeting) connector.getSession().get(Meeting.class, title);
-//	}
-
 	public Meeting add(Meeting meeting) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().save(meeting);
@@ -49,10 +45,27 @@ public class MeetingService {
 		return participant;
 	}
 
-	public Collection<Participant> getMeetingParticipants(long id) {
-		String hql = "SELECT p FROM Meeting m join m.participants p WHERE m.id = " + id;
-		Query query = connector.getSession().createQuery(hql);
-		Collection<Participant> meetingParticipants = query.list();
-		return meetingParticipants;
+//	niepotrzebne
+//	public Collection<Participant> getMeetingParticipants(Meeting meeting) {
+//		return meeting.getParticipants();
+//	}
+
+	public void delete(Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().delete(meeting);
+		transaction.commit();
+	}
+	
+	public void update(Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().merge(meeting);
+		transaction.commit();
+	}
+	
+	public void removeParticipantFromMeeting(Meeting meeting, Participant participant) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		meeting.removeParticipant(participant);
+		connector.getSession().merge(meeting);
+		transaction.commit();
 	}
 }

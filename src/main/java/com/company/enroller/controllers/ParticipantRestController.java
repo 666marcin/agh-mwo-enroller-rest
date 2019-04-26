@@ -28,18 +28,10 @@ public class ParticipantRestController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getMeeting(@PathVariable("id") String login) {
-		Participant participant = participantService.findByLogin(login); // zeby
-																			// sprawdzic
-																			// czy
-																			// dziala
-																			// w
-																			// np.
-																			// przegladarke
-																			// http://localhost:8080/participants/user5
-																			// lub
-																			// user2
-																			// itd.
+	public ResponseEntity<?> getParticipant(@PathVariable("id") String login) {
+		Participant participant = participantService.findByLogin(login);
+		// zeby sprawdzic czy dziala w np. przegladarke
+		// http://localhost:8080/participants/user5 lub user2 itd.
 		if (participant == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
